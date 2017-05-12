@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+      http://www.springframework.org/schema/beans/spring-beans-3.0.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <!--<bean id="c3p0DataSource" destroy-method="close" class="com.mchange.v2.c3p0.ComboPooledDataSource">-->
+        <!--<property name="driverClass" value="com.mysql.jdbc.Driver" />-->
+        <!--<property name="jdbcUrl" value="jdbc:mysql://119.23.24.181:3306/YITOP" />-->
+        <!--<property name="user" value="yitop" />-->
+        <!--<property name="password" value="123456" />-->
+        <!--<property name="initialPoolSize" value="3" />-->
+        <!--<property name="minPoolSize" value="3" />-->
+        <!--<property name="maxPoolSize" value="20" />-->
+        <!--<property name="maxIdleTime" value="5000" />-->
+    <!--</bean>-->
+    <bean id="c3p0DataSource" destroy-method="close" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+        <property name="driverClass" value="com.mysql.jdbc.Driver" />
+        <property name="jdbcUrl" value="jdbc:mysql://localhost:3306/test" />
+        <property name="user" value="mashaobo" />
+        <property name="password" value="123456" />
+        <property name="initialPoolSize" value="3" />
+        <property name="minPoolSize" value="3" />
+        <property name="maxPoolSize" value="20" />
+        <property name="maxIdleTime" value="5000" />
+    </bean>
+    <bean id="sessionFactory"
+          class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+        <property name="dataSource" ref="c3p0DataSource" />
+        <property name="hibernateProperties">
+            <props>
+                <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+                <prop key="hibernate.show_sql">true</prop>
+            </props>
+        </property>
+        <property name="mappingResources">
+        <value>com/heye/entity/User.hbm.xml</value>
+        </property>
+    </bean>
+    <!-- 配置spring的PlatformTransactionManager，名字为默认值 -->
+    <bean name="transactionManager" id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="c3p0DataSource" />
+    </bean>
+
+    <bean id="serviceTest" class="com.heye.service.impl.ServiceTestImpl">
+        <property name="sessionFactory" ref="sessionFactory" />
+    </bean>
+
+</beans>
